@@ -22,7 +22,9 @@ func check_public_ip() error {
 	}
 	msg := fmt.Sprintf("%s 新增%s", app.ID, ip)
 	tools.ListAddString(&app.AllowIp, ip)
-	push_message(msg)
+	if err := push_message(msg); err != nil {
+		panic(err)
+	}
 	// 将配置数据转换为 YAML 格式
 	yamlData, err := yaml.Marshal(&app)
 	if err != nil {

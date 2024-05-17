@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/tengfei-xy/go-log"
+	"github.com/tengfei-xy/go-tools"
 )
 
 func push_message(text string) error {
@@ -22,7 +23,6 @@ func push_message(text string) error {
 	if err != nil {
 		return err
 	}
-	log.Infof(token)
 	req.Header.Set("authorization", `bearer `+token)
 	req.Header.Set("apns-push-type", `alert`)
 	req.Header.Set("apns-topic", app.Push.Topic)
@@ -45,6 +45,9 @@ func push_message(text string) error {
 }
 
 func getTokenFile() (string, error) {
+	if !tools.FileExist(app.Push.CreateTokenFile) {
+		panic(fmt.Sprintf("%s不存在", app.Push.CreateTokenFile))
+	}
 	cmd := exec.Command("bash", app.Push.CreateTokenFile)
 	r, err := cmd.Output()
 	return string(r), err
