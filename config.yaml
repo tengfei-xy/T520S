@@ -1,0 +1,23 @@
+id: 
+weather:
+    cor: 
+    token: 
+gemini:
+    api_key: 
+    prompt: 
+proxy:
+    socks5: 
+volce:
+    token: 
+    appid: 
+    voice_type: 
+push:
+    device_token: 
+    topic: 
+    apns_host_name: 
+    create_token_file: 
+exec_time:
+    hour: 
+    minute: 
+allow_ip:
+    - 
