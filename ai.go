@@ -21,7 +21,6 @@ func get_ai_text(prompt string, text string) (string, error) {
 	switch air.Candidates[0].FinishReason {
 	case "SAFETY":
 		log.Errorf("FinishReason:%s", air.Candidates[0].FinishReason)
-		log.Error(d)
 		return "", fmt.Errorf("failed")
 	case "STOP":
 		break

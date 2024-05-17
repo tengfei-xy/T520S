@@ -56,12 +56,16 @@ type Proxy struct {
 
 type flagStruct struct {
 	config_file string
+	test        bool
+	test_all    bool
 	version     bool
 }
 
 func init_flag() flagStruct {
 	var f flagStruct
 	flag.StringVar(&f.config_file, "c", "config.yaml", "打开配置文件")
+	flag.BoolVar(&f.test, "t", false, "测试语音")
+	flag.BoolVar(&f.test_all, "a", false, "完整测试")
 	flag.BoolVar(&f.version, "v", false, "查看版本号")
 	flag.Parse()
 	return f
@@ -80,7 +84,23 @@ func init_config(flag flagStruct) {
 	if err != nil {
 		panic(err)
 	}
+
 	app.config_file = flag.config_file
+
+	if flag.test {
+		mp3, err := get_volce("测试语音")
+		if err != nil {
+			panic(err)
+		}
+		player(mp3)
+		os.Exit(0)
+	}
+	if flag.test_all {
+		start()
+		os.Exit(0)
+
+	}
+
 	return
 
 }

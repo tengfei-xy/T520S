@@ -26,13 +26,13 @@ func check_public_ip() error {
 	// 将配置数据转换为 YAML 格式
 	yamlData, err := yaml.Marshal(&app)
 	if err != nil {
-		log.Fatalf("error: %v", err)
+		return err
 	}
 
 	// 写入 YAML 文件
 	err = os.WriteFile(app.config_file, yamlData, 0644) // 0644 是文件权限
 	if err != nil {
-		log.Fatalf("error writing YAML file: %v", err)
+		return err
 	}
 	return nil
 
