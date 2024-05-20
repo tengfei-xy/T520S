@@ -3,7 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net"
 	"os"
+	"time"
 
 	"gopkg.in/yaml.v3"
 )
@@ -103,4 +105,18 @@ func init_config(flag flagStruct) {
 
 	return
 
+}
+
+func check_config() {
+	conn, err := net.DialTimeout("tcp", app.Proxy.Socks5, 5*time.Second)
+	if err != nil {
+		panic(fmt.Sprintf("%s连接失败:%s", app.Proxy.Socks5, err))
+	} else {
+		if conn != nil {
+			_ = conn.Close()
+			return
+		} else {
+			panic(fmt.Sprintf("%s连接失败:%s", app.Proxy.Socks5, err))
+		}
+	}
 }

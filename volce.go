@@ -110,7 +110,7 @@ func get_volce_data(text string) VolceReq {
 }
 func check_res(d VolceRes) error {
 	if d.Code != 3000 {
-		return fmt.Errorf("code:%s ,message:%s", d.Code, d.Message)
+		return fmt.Errorf("code:%d ,message:%s", d.Code, d.Message)
 	}
 	return nil
 }

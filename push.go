@@ -16,7 +16,8 @@ func push_message(text string) error {
 		log.Error(err)
 		return err
 	}
-	data := `{"aps":{"alert":"` + text + `"}}`
+	token = strings.TrimSpace(token)
+	data := fmt.Sprintf(`{"aps":{"alert":"%s"}}`, text)
 	url := fmt.Sprintf("https://%s/3/device/%s", app.Push.ApnsHostName, app.Push.DeviceToken)
 	client := http.Client{}
 	req, err := http.NewRequest("POST", url, strings.NewReader(data))
