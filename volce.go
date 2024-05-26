@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
@@ -19,9 +20,47 @@ import (
 )
 
 func player(filename string) {
-	exec.Command("mpv", filename).Run()
+	cmd := exec.Command("mpv", filename)
 
+	// 使用StdoutPipe和StderrPipe获取实时输出
+	stdoutPipe, err := cmd.StdoutPipe()
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	stderrPipe, err := cmd.StderrPipe()
+	if err != nil {
+		log.Error(err)
+		return
+	}
+
+	// 启动播放器
+	if err := cmd.Start(); err != nil {
+		log.Error(err)
+		return
+	}
+
+	// 读取标准输出和标准错误的实时内容
+	go func() {
+		scanner := bufio.NewScanner(stdoutPipe)
+		for scanner.Scan() {
+			log.Info(scanner.Text())
+		}
+	}()
+	go func() {
+		scanner := bufio.NewScanner(stderrPipe)
+		for scanner.Scan() {
+			log.Error(scanner.Text())
+		}
+	}()
+
+	// 等待命令结束，处理错误
+	if err := cmd.Wait(); err != nil {
+		log.Error(err)
+		return
+	}
 }
+
 func get_volce(text string) (string, error) {
 	d := get_volce_data(text)
 	j, err := json.Marshal(d)

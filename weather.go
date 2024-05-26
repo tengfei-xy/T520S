@@ -36,7 +36,7 @@ func get_weather_daily() (today, error) {
 	var dr DailyReq
 	f, err := get_weather_daily_req()
 	if err != nil {
-		log.Error(f)
+		log.Error(err)
 		return today{}, err
 
 	}
@@ -48,7 +48,7 @@ func get_weather_daily() (today, error) {
 	if dr.Status != "ok" {
 		log.Error(f)
 		log.Error(dr)
-		return today{}, err
+		return today{}, fmt.Errorf("%v", string(f))
 	}
 	var today today
 	today.max_temp = int32(dr.Result.Daily.Temperature[0].Max)

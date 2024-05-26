@@ -21,7 +21,7 @@ func main() {
    ██║   ╚════██║██╔═══╝ ████╔╝██║╚════██║
    ██║   ███████║███████╗╚██████╔╝███████║
    ╚═╝   ╚══════╝╚══════╝ ╚═════╝ ╚══════╝`)
-	app.version = "0.3"
+	app.version = "0.4"
 
 	go func() {
 		for {
@@ -36,11 +36,13 @@ func main() {
 	for {
 
 		n := time.Now()
-		if app.ExecTime.Hour != n.Hour() && app.ExecTime.Minute != n.Minute() {
+		if app.ExecTime.Hour != n.Hour() || app.ExecTime.Minute != n.Minute() {
 			time.Sleep(time.Duration(1) * time.Minute)
 			continue
 		}
 		start()
+		time.Sleep(time.Duration(5) * time.Minute)
+
 	}
 
 }

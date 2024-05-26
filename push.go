@@ -19,7 +19,7 @@ func push_message(text string) error {
 	token = strings.TrimSpace(token)
 	data := fmt.Sprintf(`{"aps":{"alert":"%s"}}`, text)
 	url := fmt.Sprintf("https://%s/3/device/%s", app.Push.ApnsHostName, app.Push.DeviceToken)
-	client := http.Client{}
+	client := &http.Client{}
 	req, err := http.NewRequest("POST", url, strings.NewReader(data))
 	if err != nil {
 		return err
@@ -30,9 +30,7 @@ func push_message(text string) error {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Errorf("内部错误:%v", err)
 		return err
-
 	}
 
 	defer resp.Body.Close()

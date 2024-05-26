@@ -7,6 +7,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/tengfei-xy/go-log"
+	"github.com/tengfei-xy/go-tools"
 	"gopkg.in/yaml.v3"
 )
 
@@ -57,17 +59,18 @@ type Proxy struct {
 }
 
 type flagStruct struct {
-	config_file string
-	test        bool
-	test_all    bool
-	version     bool
+	config_file  string
+	test         bool
+	test_all     bool
+	mp3_filename string
+	version      bool
 }
 
 func init_flag() flagStruct {
 	var f flagStruct
 	flag.StringVar(&f.config_file, "c", "config.yaml", "打开配置文件")
 	flag.BoolVar(&f.test, "t", false, "测试语音")
-	flag.BoolVar(&f.test_all, "a", false, "完整测试")
+	flag.StringVar(&f.mp3_filename, "m", "", "指定播放文件")
 	flag.BoolVar(&f.version, "v", false, "查看版本号")
 	flag.Parse()
 	return f
@@ -101,6 +104,13 @@ func init_config(flag flagStruct) {
 		start()
 		os.Exit(0)
 
+	}
+	if flag.mp3_filename != "" {
+		if tools.FileExist(flag.mp3_filename) == false {
+			log.Errorf("%s文件不存在", flag.mp3_filename)
+		}
+		player(flag.mp3_filename)
+		os.Exit(0)
 	}
 
 	return

@@ -23,6 +23,7 @@ func check_public_ip() error {
 	msg := fmt.Sprintf("%s 新增%s", app.ID, ip)
 	tools.ListAddString(&app.AllowIp, ip)
 	if err := push_message(msg); err != nil {
+		log.Errorf("发送消息:%s %v", msg, err)
 		panic(err)
 	}
 	// 将配置数据转换为 YAML 格式
@@ -42,7 +43,7 @@ func check_public_ip() error {
 func get_public_ip() (string, error) {
 
 	const url = "https://2024.ipchaxun.com"
-	client := http.Client{}
+	client := &http.Client{}
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
